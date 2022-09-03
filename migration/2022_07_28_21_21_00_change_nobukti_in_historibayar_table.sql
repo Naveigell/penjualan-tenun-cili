@@ -1,0 +1,1 @@
+ALTER TABLE historibayar MODIFY nobukti VARCHAR (255) NOT NULL;
