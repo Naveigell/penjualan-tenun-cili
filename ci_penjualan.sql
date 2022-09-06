@@ -273,7 +273,7 @@ CREATE TABLE `view_totalpenjualan` (
 --
 DROP TABLE IF EXISTS `view_totalbayar`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_totalbayar`  AS  select `historibayar`.`no_faktur` AS `no_faktur`,sum(`historibayar`.`bayar`) AS `totalbayar` from `historibayar` group by `historibayar`.`no_faktur` ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `view_totalbayar`  AS  select `historibayar`.`no_faktur` AS `no_faktur`,sum(`historibayar`.`bayar`) AS `totalbayar` from `historibayar` group by `historibayar`.`no_faktur` ;
 
 -- --------------------------------------------------------
 
@@ -282,7 +282,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `view_totalpenjualan`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_totalpenjualan`  AS  select `penjualan_detail`.`no_faktur` AS `no_faktur`,sum(`penjualan_detail`.`harga` * `penjualan_detail`.`qty`) AS `totalpenjualan` from `penjualan_detail` group by `penjualan_detail`.`no_faktur` ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `view_totalpenjualan`  AS  select `penjualan_detail`.`no_faktur` AS `no_faktur`,sum(`penjualan_detail`.`harga` * `penjualan_detail`.`qty`) AS `totalpenjualan` from `penjualan_detail` group by `penjualan_detail`.`no_faktur` ;
 
 --
 -- Indexes for dumped tables

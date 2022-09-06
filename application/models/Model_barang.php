@@ -4,7 +4,7 @@ class Model_barang extends CI_Model
 {
 	function getDataBarang()
 	{
-		return $this->db->get('barang_master');
+		return $this->db->order_by('kode_barang', 'asc')->get('barang_master');
 	}
 
 	function insertBarang($data)
