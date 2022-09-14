@@ -335,8 +335,6 @@
 			$("#modalpelanggan").modal("show");
 		});
 
-		$("#tabelpelanggan").DataTable();
-
 		$(".pilih").click(function() {
 			var kodepelanggan = $(this).attr("data-kodepel");
 			var namapelanggan = $(this).attr("data-namapel");
@@ -344,6 +342,8 @@
 			$("#namapelanggan").val(namapelanggan);
 			$("#modalpelanggan").modal("hide");
 		});
+
+		$("#tabelpelanggan").DataTable();
 
 		$("#kode_barang").click(function(){
 			$("#modalbarangharga").modal("show");
