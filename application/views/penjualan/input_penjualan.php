@@ -343,13 +343,9 @@
 			$("#modalpelanggan").modal("hide");
 		});
 
-		$("#tabelpelanggan").DataTable();
-
 		$("#kode_barang").click(function(){
 			$("#modalbarangharga").modal("show");
 		});
-
-		$("#tabelharga").DataTable();
 
 		$(".pilihbarang").click(function() {
 			var kodebarang = $(this).attr("data-kodebarang");
@@ -401,5 +397,9 @@
 				});
 			}
 		});
+
+		$("#tabelharga").DataTable();
+
+		$("#tabelpelanggan").DataTable();
 	});
 </script>
