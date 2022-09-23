@@ -1,6 +1,7 @@
 <form action="<?php echo base_url() ?>cabang/simpancabang" class="formcabang" method="POST">
 	<div class="form-group mb-3">
-		<input type="text" class="form-control" name="kodecabang" placeholder="Kode Cabang">
+		<input type="text" class="form-control" name="kodecabang" placeholder="Kode Cabang" onkeyup="checkCode(this)">
+		<span class="small text text-danger d-none" id="code-exists">Kode cabang sudah ada</span>
 	</div>
 	<div class="form-group mb-3">
 		<input type="text" class="form-control" name="namacabang" placeholder="Nama Cabang">
@@ -12,11 +13,39 @@
 		<input type="number" class="form-control" name="telepon" placeholder="Telepon">
 	</div>
 	<div class="mb-3">
-		<button type="submit" class="btn btn-primary w-100">Simpan</button>
+		<button id="save-button" type="submit" class="btn btn-primary w-100">Simpan</button>
 	</div>
 </form>
 
 <script>
+	function checkCode(evt) {
+
+		if (evt.value == '') {
+			$('#code-exists').removeClass('d-block');
+			$('#code-exists').addClass('d-none');
+
+			return;
+		}
+
+		$.ajax({
+			type: 'GET',
+			url: '<?php echo base_url(); ?>cabang/checkCode/' + evt.value,
+			success: function(response) {
+				if (JSON.parse(response).exists) {
+					$('#code-exists').addClass('d-block');
+					$('#code-exists').removeClass('d-none');
+
+					$('#save-button').attr('disabled', '');
+				} else {
+					$('#code-exists').removeClass('d-block');
+					$('#code-exists').addClass('d-none');
+
+					$('#save-button').removeAttr('disabled');
+				}
+			}
+		});
+	}
+
 	$(function(){
 		$('.formcabang').bootstrapValidator({
 	      fields: {

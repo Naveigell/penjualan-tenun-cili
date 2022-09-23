@@ -15,6 +15,13 @@ class Pelanggan extends CI_Controller
 		$this->template->load('template/template', 'pelanggan/view_pelanggan', $data);
 	}
 
+	public function checkCode($code)
+	{
+		echo json_encode([
+			"exists" => count($this->Model_pelanggan->getPelanggan($code)->result_array()) > 0
+		]);
+	}
+
 	function inputpelanggan()
 	{
 		$data['cabang'] = $this->Model_cabang->getDataCabang()->result();

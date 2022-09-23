@@ -19,6 +19,13 @@ class Cabang extends CI_Controller
 		$this->load->view('cabang/input_cabang');
 	}
 
+	public function checkCode($code)
+	{
+		echo json_encode([
+			"exists" => count($this->Model_cabang->getCabang($code)->result_array()) > 0
+		]);
+	}
+
 	function simpancabang()
 	{
 		$kodecabang = $this->input->post('kodecabang');
