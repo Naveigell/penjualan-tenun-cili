@@ -10,6 +10,7 @@ class Penjualan extends CI_Controller
 		$this->load->model('Model_barang');
 		$this->load->model('Model_cabang');
 		$this->load->model('Model_user');
+		$this->load->model('Model_voucher');
 		$this->load->model('Model_penjualan_user_pivot');
 		checklogin();
 	}
@@ -120,6 +121,7 @@ class Penjualan extends CI_Controller
 		$data['is_approved'] = 0;
 		$data['pelanggan'] = $this->Model_pelanggan->getDataPelanggan()->result();
 		$data['harga'] = $this->Model_barang->getDataHarga()->result();
+		$data['vouchers'] = $this->Model_voucher->all()->result();
 		$this->template->load('template/template', 'penjualan/input_penjualan', $data);
 	}
 

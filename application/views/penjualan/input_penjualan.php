@@ -79,7 +79,7 @@
 			                      <input type="text" readonly class="form-control" name="kode_barang" id="kode_barang" placeholder="Kode Barang">
 		                    </div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-2">
 							<div class="input-icon mb-3">
 			                      <span class="input-icon-addon">
 			                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="4" y="4" width="6" height="6" rx="1" /><rect x="14" y="4" width="6" height="6" rx="1" /><rect x="4" y="14" width="6" height="6" rx="1" /><rect x="14" y="14" width="6" height="6" rx="1" /></svg>
@@ -93,6 +93,7 @@
 			                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect width="6" height="6" x="9" y="5" rx="1" /><line x1="4" y1="7" x2="5" y2="7" /><line x1="4" y1="11" x2="5" y2="11" /><line x1="19" y1="7" x2="20" y2="7" /><line x1="19" y1="11" x2="20" y2="11" /><line x1="4" y1="15" x2="20" y2="15" /><line x1="4" y1="19" x2="20" y2="19" /></svg>
 			                      </span>
 			                      <input type="text" readonly class="form-control" style="text-align: right;" name="harga" id="harga" placeholder="Harga">
+								<input type="hidden" id="real-price">
 		                    </div>
 						</div>
 						<div class="col-md-2">
@@ -102,6 +103,14 @@
 			                      </span>
 			                      <input type="number" class="form-control" name="qty" id="qty" placeholder="Qty">
 		                    </div>
+						</div>
+						<div class="col-md-2">
+							<div class="input-icon mb-3">
+			                      <span class="input-icon-addon">
+			                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect width="6" height="6" x="9" y="5" rx="1" /><line x1="4" y1="7" x2="5" y2="7" /><line x1="4" y1="11" x2="5" y2="11" /><line x1="19" y1="7" x2="20" y2="7" /><line x1="19" y1="11" x2="20" y2="11" /><line x1="4" y1="15" x2="20" y2="15" /><line x1="4" y1="19" x2="20" y2="19" /></svg>
+			                      </span>
+								<input type="text" readonly class="form-control" style="text-align: right;" name="voucher" id="voucher" placeholder="Voucher">
+							</div>
 						</div>
 						<div class="col-md-2">
 							<a href="#" class="btn btn-primary" id="tambahbarang">
@@ -180,6 +189,50 @@
       </div>
     </div>
   </div>
+</div>
+<div class="modal modal-blur fade" id="modalvoucher" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Data Harga Barang</h5>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-striped table-bordered" id="tabelharga">
+					<thead>
+					<tr>
+						<th style="width: 7%;">NO</th>
+						<th>KODE VOUCHER</th>
+						<th>JUMLAH (%)</th>
+						<th>TANGGAL BERLAKU</th>
+						<th style="width: 15%;">AKSI</th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php
+					foreach ($vouchers as $index => $voucher) {
+
+						if (date('Y-m-d') < $voucher->start_date || date('Y-m-d') > $voucher->end_date) {
+							continue;
+						}
+
+						?>
+						<tr>
+							<td><?php echo $index + 1; ?></td>
+							<td><?php echo $voucher->voucher_code; ?></td>
+							<td><?php echo $voucher->amount_in_percent; ?>%</td>
+							<td><?php echo date('d F Y', strtotime($voucher->start_date)); ?> - <?= date('d F Y', strtotime($voucher->end_date)); ?></td>
+							<td>
+								<a href="#" class="btn btn-sm btn-primary pilih-voucher" data-percent="<?= $voucher->amount_in_percent; ?>" data-kodevoucher="<?php echo $voucher->voucher_code; ?>">Pilih</a>
+							</td>
+						</tr>
+						<?php
+					} ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="modal modal-blur fade" id="modalbarangharga" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -347,6 +400,25 @@
 			$("#modalbarangharga").modal("show");
 		});
 
+		$("#voucher").click(function(){
+			$("#modalvoucher").modal("show");
+		});
+
+		$('.pilih-voucher').click(function () {
+
+			$("#modalvoucher").modal("hide");
+
+			if ($("#kode_barang").val() == '') {
+				return;
+			}
+
+			var percent = $(this).data('percent');
+			var harga	= $('#harga');
+
+			$("#voucher").val($(this).data('kodevoucher'));
+			harga.val(harga.val() - (harga.val() * (percent / 100)));
+		});
+
 		$(".pilihbarang").click(function() {
 			var kodebarang = $(this).attr("data-kodebarang");
 			var namabarang = $(this).attr("data-namabarang");
@@ -354,6 +426,8 @@
 			$("#kode_barang").val(kodebarang);
 			$("#nama_barang").val(namabarang);
 			$("#harga").val(harga);
+			$("#real-price").val(harga);
+			$("#voucher").val('');
 			$("#modalbarangharga").modal("hide");
 		});
 

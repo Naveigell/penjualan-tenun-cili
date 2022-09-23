@@ -145,6 +145,9 @@
 								<a class="dropdown-item" href="<?php echo base_url(); ?>barang/harga" >
 									Data Harga
 								</a>
+								<a class="dropdown-item" href="<?php echo base_url(); ?>voucher" >
+									Data Voucher
+								</a>
 							</div>
 						</div>
 					</div>

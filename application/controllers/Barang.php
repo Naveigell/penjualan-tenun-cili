@@ -51,6 +51,13 @@ class Barang extends CI_Controller
 		}
 	}
 
+	public function checkCode($code)
+	{
+		echo json_encode([
+			"exists" => count($this->Model_barang->getBarang($code)->result_array()) > 0
+		]);
+	}
+
 	function editbarang()
 	{
 		$kodebarang = $this->uri->segment(3);
